@@ -91,41 +91,41 @@ select * from EmployeeDemographics order by 4 Desc
 select * from EmployeeDemographics;
 select * from Employeesalary;
 
-select * from [Sql Tutorial].dbo.EmployeeDemographics
+select * from Portfolio_Project.dbo.EmployeeDemographics
 Inner Join
-[Sql Tutorial].dbo.Employeesalary
+Portfolio_Project.dbo.Employeesalary
 ON EmployeeDemographics.EmployeeID=Employeesalary.EmployeeID
 
-select * from [Sql Tutorial].dbo.EmployeeDemographics
+select * from Portfolio_Project.dbo.EmployeeDemographics
 Full Outer Join
-[Sql Tutorial].dbo.Employeesalary
+Portfolio_Project.dbo.Employeesalary
 ON EmployeeDemographics.EmployeeID=Employeesalary.EmployeeID
 
-select * from [Sql Tutorial].dbo.EmployeeDemographics
+select * from Portfolio_Project.dbo.EmployeeDemographics
 left Outer Join
-[Sql Tutorial].dbo.Employeesalary
+Portfolio_Project.dbo.Employeesalary
 ON EmployeeDemographics.EmployeeID=Employeesalary.EmployeeID
 
-select * from [Sql Tutorial].dbo.EmployeeDemographics
+select * from Portfolio_Project.dbo.EmployeeDemographics
 right Outer Join
-[Sql Tutorial].dbo.Employeesalary
+Portfolio_Project.dbo.Employeesalary
 ON EmployeeDemographics.EmployeeID=Employeesalary.EmployeeID
 
-select EmployeeDemographics.EmployeeID,Firstname,jobtitle from [Sql Tutorial].dbo.EmployeeDemographics
+select EmployeeDemographics.EmployeeID,Firstname,jobtitle from Portfolio_Project.dbo.EmployeeDemographics
 left outer Join
-[Sql Tutorial].dbo.Employeesalary
+Portfolio_Project.dbo.Employeesalary
 ON EmployeeDemographics.EmployeeID=Employeesalary.EmployeeID
 
-Select EmployeeDemographics.EmployeeID,Firstname, salary from [Sql Tutorial].dbo.EmployeeDemographics
+Select EmployeeDemographics.EmployeeID,Firstname, salary from Portfolio_Project.dbo.EmployeeDemographics
 inner join
-[Sql Tutorial].dbo.Employeesalary
+Portfolio_Project.dbo.Employeesalary
 ON EmployeeDemographics.EmployeeID = Employeesalary.EmployeeID
 where Firstname <> 'micheal'
 Order by 'Salary'DESC
 
-Select jobtitle, AVG(salary) from [Sql Tutorial].dbo.EmployeeDemographics
+Select jobtitle, AVG(salary) from Portfolio_Project.dbo.EmployeeDemographics
 inner join
-[Sql Tutorial].dbo.Employeesalary
+Portfolio_Project.dbo.Employeesalary
 ON EmployeeDemographics.EmployeeID = Employeesalary.EmployeeID
 where jobtitle ='Salesman'
 Group By jobtitle
@@ -166,7 +166,7 @@ CASE
 	When Age between 27 AND 30 then 'Young'
 	ELSE 'baby'
 END As type
-from [Sql Tutorial].dbo.EmployeeDemographics
+from Portfolio_Project.dbo.EmployeeDemographics
 where Age is Not Null
 order by Age
 
@@ -240,13 +240,13 @@ from EmployeeDemographics As Demo
 
 Select firstname, lastname, Gender, Salary,
 COUNT(Gender) over (Partition By Gender) As TotalGender
-from [Sql Tutorial]..EmployeeDemographics Demo
-Join [Sql Tutorial]..Employeesalary sal
+from Portfolio_Project..EmployeeDemographics Demo
+Join Portfolio_Project..Employeesalary sal
 on demo.EmployeeID = sal.EmployeeID
 Select firstname, lastname, jobtitle, Salary,
 COUNT(jobtitle) over (Partition By jobtitle) As Totaljob
-from [Sql Tutorial]..EmployeeDemographics Demo
-Join [Sql Tutorial]..Employeesalary sal
+from Portfolio_Project..EmployeeDemographics Demo
+Join Portfolio_Project..Employeesalary sal
 on demo.EmployeeID = sal.EmployeeID
 
 
@@ -255,8 +255,8 @@ on demo.EmployeeID = sal.EmployeeID
 with CTE_Employee as
 (Select firstname, lastname, Gender, Salary,
 COUNT(Gender) over (Partition By Gender) As TotalGender
-from [Sql Tutorial]..EmployeeDemographics Demo
-Join [Sql Tutorial]..Employeesalary sal
+from Portfolio_Project..EmployeeDemographics Demo
+Join Portfolio_Project..Employeesalary sal
 on demo.EmployeeID = sal.EmployeeID
 where Salary >'45000'
 )
@@ -276,7 +276,7 @@ Insert into #tmp_Employees values (
 )
 
 Insert into #tmp_Employees 
-SELECT * From [Sql Tutorial]..Employeesalary
+SELECT * From Portfolio_Project..Employeesalary
 
 Select * From #tmp_Employees
 Drop Table if exists #temp_employee3
@@ -288,8 +288,8 @@ AvgSalary int
 )
 Insert into #temp_employee3
 SELECT JobTitle, Count(JobTitle), Avg(Age), AVG(salary)
-FROM [Sql Tutorial]..EmployeeDemographics emp
-JOIN [Sql Tutorial]..EmployeeSalary sal
+FROM Portfolio_Project..EmployeeDemographics emp
+JOIN Portfolio_Project..EmployeeSalary sal
 	ON emp.EmployeeID = sal.EmployeeID
 group by JobTitle
 
@@ -331,7 +331,7 @@ select SUBSTRING(Firstname, 5,3) from EmployeeErrors
 Select Substring(err.FirstName,1,3), Substring(dem.FirstName,1,3), Substring(err.LastName,1,3), 
 Substring(dem.LastName,1,3)
 FROM EmployeeErrors err
-JOIN [Sql Tutorial]..EmployeeDemographics dem
+JOIN Portfolio_Project..EmployeeDemographics dem
 	on Substring(err.FirstName,1,3) = Substring(dem.FirstName,1,3)
 	and Substring(err.LastName,1,3) = Substring(dem.LastName,1,3)
 
@@ -346,7 +346,7 @@ AS
 Select * from EmployeeDemographics
 
 EXEC TEXT1
-use [Sql Tutorial]
+use Portfolio_Project
 CREATE PROCEDURE Temp_Employee
 AS
 DROP TABLE IF EXISTS #temp_employee
@@ -358,12 +358,3 @@ AvgSalary int
 )
 
 EXEC Temp_Employee
-
-
-
-
-
-
-
-
-
