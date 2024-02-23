@@ -6,63 +6,58 @@ Cleaning Data in SQL Queries
 
 
 Select *
-From SQLTUTORIAL..housingdata
+From learning_SQL.dbo.Housingdata
 
 --------------------------------------------------------------------------------------------------------------------------
 
 -- Standardize Date Format
---DATE - format YYYY-MM-DD
---DATETIME - format: YYYY-MM-DD HH:MI:SS
---SMALLDATETIME - format: YYYY-MM-DD HH:MI:SS
---TIMESTAMP - format: a unique number
-
-Select saleDate, CONVERT(Date,SaleDate)
-From SQLTUTORIAL.dbo.housingdata
-
-Select saleDate
-From SQLTUTORIAL.dbo.housingdata
 
 
-Update housingdata
+Select saleDateConverted, CONVERT(Date,SaleDate)
+From learning_SQL.dbo.Housingdata
+
+
+Update Housingdata
 SET SaleDate = CONVERT(Date,SaleDate)
 
 -- If it doesn't Update properly
 
-ALTER TABLE housingdata
+ALTER TABLE Housingdata
 Add SaleDateConverted Date;
 
-Update housingdata
+Update Housingdata
 SET SaleDateConverted = CONVERT(Date,SaleDate)
 
-Select SaleDateConverted
-From SQLTUTORIAL.dbo.housingdata
+
  --------------------------------------------------------------------------------------------------------------------------
 
 -- Populate Property Address data
 
 Select *
-From SQLTUTORIAL..housingdata
+From learning_SQL.dbo.Housingdata
 Where PropertyAddress is null
 order by ParcelID
 
-Select PropertyAddress
-From SQLTUTORIAL..housingdata
---Where PropertyAddress is null
-order by ParcelID
-
-Select a.ParcelID, a.PropertyAddress, b.ParcelID, b.PropertyAddress, 
-ISNULL(a.PropertyAddress,b.PropertyAddress)
-From SQLTUTORIAL.dbo.housingdata a
-JOIN SQLTUTORIAL.dbo.housingdata b
+--Query to check the miss Property data
+Select a.ParcelID, a.PropertyAddress, b.ParcelID, b.PropertyAddress
+From learning_SQL.dbo.Housingdata a
+JOIN learning_SQL.dbo.Housingdata b
 	on a.ParcelID = b.ParcelID
 	AND a.[UniqueID ] <> b.[UniqueID ]
-Where a.PropertyAddress is not null
+Where a.PropertyAddress is null
+
+Select a.ParcelID, a.PropertyAddress, b.ParcelID, b.PropertyAddress, ISNULL(a.PropertyAddress,b.PropertyAddress)
+From learning_SQL.dbo.Housingdata a
+JOIN learning_SQL.dbo.Housingdata b
+	on a.ParcelID = b.ParcelID
+	AND a.[UniqueID ] <> b.[UniqueID ]
+Where a.PropertyAddress is null
 
 
 Update a
 SET PropertyAddress = ISNULL(a.PropertyAddress,b.PropertyAddress)
-From SQLTUTORIAL.dbo.housingdata a
-JOIN SQLTUTORIAL.dbo.housingdata b
+From learning_SQL.dbo.Housingdata a
+JOIN learning_SQL.dbo.Housingdata b
 	on a.ParcelID = b.ParcelID
 	AND a.[UniqueID ] <> b.[UniqueID ]
 Where a.PropertyAddress is null
@@ -73,112 +68,80 @@ Where a.PropertyAddress is null
 --------------------------------------------------------------------------------------------------------------------------
 
 -- Breaking out Address into Individual Columns (Address, City, State)
--- Assuming your table is named 'your_table' and has a column 'full_name'
-
--- Add new columns for first and last names
---ALTER TABLE your_table
---ADD first_name NVARCHAR(MAX),
---    last_name NVARCHAR(MAX);
-
----- Update the new columns based on the 'full_name' column
---UPDATE your_table
---SET
---    first_name = SUBSTRING(full_name, 1, CHARINDEX(' ', full_name) - 1),
---    last_name = SUBSTRING(full_name, CHARINDEX(' ', full_name) + 1, LEN(full_name))
---WHERE CHARINDEX(' ', full_name) > 0;
-
-
-
-
-
 
 
 Select PropertyAddress
-From SQLTUTORIAL.dbo.housingdata
+From learning_SQL.dbo.Housingdata
 --Where PropertyAddress is null
 --order by ParcelID
 
 SELECT
 SUBSTRING(PropertyAddress, 1, CHARINDEX(',', PropertyAddress) -1 ) as Address
-, SUBSTRING(PropertyAddress, CHARINDEX(',', PropertyAddress) + 1 , 
-LEN(PropertyAddress)) as AddressTown
+, SUBSTRING(PropertyAddress, CHARINDEX(',', PropertyAddress) + 1 , LEN(PropertyAddress)) as Address
 
-From SQLTUTORIAL.dbo.housingdata
+From learning_SQL.dbo.Housingdata
 
 
-ALTER TABLE housingdata
+ALTER TABLE Housingdata
 Add PropertySplitAddress Nvarchar(255);
 
-Update housingdata
-SET PropertySplitAddress = SUBSTRING(PropertyAddress, 1, 
-CHARINDEX(',', PropertyAddress) -1 )
+Update Housingdata
+SET PropertySplitAddress = SUBSTRING(PropertyAddress, 1, CHARINDEX(',', PropertyAddress) -1 )
 
 
-ALTER TABLE housingdata
+ALTER TABLE Housingdata
 Add PropertySplitCity Nvarchar(255);
 
-Update housingdata
-SET PropertySplitCity = SUBSTRING(PropertyAddress, 
-CHARINDEX(',', PropertyAddress) + 1 , LEN(PropertyAddress))
+Update Housingdata
+SET PropertySplitCity = SUBSTRING(PropertyAddress, CHARINDEX(',', PropertyAddress) + 1 , LEN(PropertyAddress))
 
 
 
 
-select PropertyAddress,SUBSTRING(PropertyAddress,-1, CHARINDEX(' ',PropertyAddress)) As Address
-from SQLTUTORIAL.dbo.housingdata
+Select *
+From learning_SQL.dbo.Housingdata
 
 
 
-Select OwnerAddress,PropertySplitAddress,PropertySplitCity,PropertyTown
-From SQLTUTORIAL.dbo.housingdata
+
 
 Select OwnerAddress
-From SQLTUTORIAL.dbo.housingdata
+From learning_SQL.dbo.Housingdata
 
-Select OwnerAddress,
-PARSENAME(REPLACE(OwnerAddress, ',', '.') , 1)
-From SQLTUTORIAL.dbo.housingdata
 
 Select
 PARSENAME(REPLACE(OwnerAddress, ',', '.') , 3)
 ,PARSENAME(REPLACE(OwnerAddress, ',', '.') , 2)
 ,PARSENAME(REPLACE(OwnerAddress, ',', '.') , 1)
-From SQLTUTORIAL.dbo.housingdata
+From learning_SQL.dbo.Housingdata
 
 
 
-ALTER TABLE housingdata
+ALTER TABLE Housingdata
 Add OwnerSplitAddress Nvarchar(255);
 
-Update housingdata
+Update Housingdata
 SET OwnerSplitAddress = PARSENAME(REPLACE(OwnerAddress, ',', '.') , 3)
 
 
-ALTER TABLE housingdata
+ALTER TABLE Housingdata
 Add OwnerSplitCity Nvarchar(255);
 
-Update housingdata
+Update Housingdata
 SET OwnerSplitCity = PARSENAME(REPLACE(OwnerAddress, ',', '.') , 2)
 
 
 
-ALTER TABLE housingdata
+ALTER TABLE Housingdata
 Add OwnerSplitState Nvarchar(255);
 
-Update housingdata
+Update Housingdata
 SET OwnerSplitState = PARSENAME(REPLACE(OwnerAddress, ',', '.') , 1)
 
 
 
 Select *
-From SQLTUTORIAL.dbo.housingdata
-
-Select OwnerName
-From SQLTUTORIAL.dbo.housingdata
-
-Select OwnerName,
-PARSENAME(REPLACE(OwnerName, '.', '.') , 2)
-From SQLTUTORIAL.dbo.housingdata
+From learning_SQL.dbo.Housingdata
 
 
 
@@ -190,7 +153,7 @@ From SQLTUTORIAL.dbo.housingdata
 
 
 Select Distinct(SoldAsVacant), Count(SoldAsVacant)
-From SQLTUTORIAL.dbo.housingdata
+From learning_SQL.dbo.Housingdata
 Group by SoldAsVacant
 order by 2
 
@@ -202,10 +165,10 @@ Select SoldAsVacant
 	   When SoldAsVacant = 'N' THEN 'No'
 	   ELSE SoldAsVacant
 	   END
-From SQLTUTORIAL.dbo.housingdata
+From learning_SQL.dbo.Housingdata
 
 
-Update housingdata
+Update Housingdata
 SET SoldAsVacant = CASE When SoldAsVacant = 'Y' THEN 'Yes'
 	   When SoldAsVacant = 'N' THEN 'No'
 	   ELSE SoldAsVacant
@@ -219,21 +182,6 @@ SET SoldAsVacant = CASE When SoldAsVacant = 'Y' THEN 'Yes'
 -----------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -- Remove Duplicates
-Select *,
-	ROW_NUMBER() OVER (
-	PARTITION BY ParcelID,
-				 PropertyAddress,
-				 SalePrice,
-				 SaleDate,
-				 LegalReference
-				 ORDER BY
-					UniqueID
-					) row_num
-
-From SQLTUTORIAL.dbo.housingdata
-order by ParcelID
-
-
 
 WITH RowNumCTE AS(
 Select *,
@@ -247,7 +195,7 @@ Select *,
 					UniqueID
 					) row_num
 
-From SQLTUTORIAL.dbo.housingdata
+From learning_SQL.dbo.Housingdata
 --order by ParcelID
 )
 Select *
@@ -255,30 +203,10 @@ From RowNumCTE
 Where row_num > 1
 Order by PropertyAddress
 
-WITH RowNumCTE AS(
-Select *,
-	ROW_NUMBER() OVER (
-	PARTITION BY ParcelID,
-				 PropertyAddress,
-				 SalePrice,
-				 SaleDate,
-				 LegalReference
-				 ORDER BY
-					UniqueID
-					) row_num
-
-From SQLTUTORIAL.dbo.housingdata
---order by ParcelID
-)
-Delete
-From RowNumCTE
-Where row_num > 1
---Order by PropertyAddress
 
 
 Select *
-From SQLTUTORIAL.dbo.housingdata
-order by ParcelID
+From learning_SQL.dbo.Housingdata
 
 
 
@@ -290,11 +218,11 @@ order by ParcelID
 
 
 Select *
-From SQLTUTORIAL.dbo.housingdata
+From learning_SQL.dbo.Housingdata
 
 
-ALTER TABLE SQLTUTORIAL.dbo.housingdata
-DROP COLUMN OwnerAddress, PropertyAddress, SaleDate
+ALTER TABLE learning_SQL.dbo.Housingdata
+DROP COLUMN OwnerAddress, TaxDistrict, PropertyAddress, SaleDate
 
 
 
@@ -327,7 +255,7 @@ DROP COLUMN OwnerAddress, PropertyAddress, SaleDate
 --GO
 
 
---USE PortfolioProject 
+--USE learning_SQL 
 
 --GO 
 
@@ -342,9 +270,9 @@ DROP COLUMN OwnerAddress, PropertyAddress, SaleDate
 
 ---- Using BULK INSERT
 
---USE PortfolioProject;
+--USE learning_SQL;
 --GO
---BULK INSERT nashvilleHousing FROM 'C:\Temp\SQL Server Management Studio\Nashville Housing Data for Data Cleaning Project.csv'
+--BULK INSERT Housingdata FROM 'C:\Temp\SQL Server Management Studio\Nashville Housing Data for Data Cleaning Project.csv'
 --   WITH (
 --      FIELDTERMINATOR = ',',
 --      ROWTERMINATOR = '\n'
@@ -353,21 +281,10 @@ DROP COLUMN OwnerAddress, PropertyAddress, SaleDate
 
 
 ---- Using OPENROWSET
---USE PortfolioProject;
+--USE learning_SQL;
 --GO
---SELECT * INTO nashvilleHousing
+--SELECT * INTO Housingdata
 --FROM OPENROWSET('Microsoft.ACE.OLEDB.12.0',
 --    'Excel 12.0; Database=C:\Users\alexf\OneDrive\Documents\SQL Server Management Studio\Nashville Housing Data for Data Cleaning Project.csv', [Sheet1$]);
 --GO
-
-
-
-
-
-
-
-
-
-
-
 
